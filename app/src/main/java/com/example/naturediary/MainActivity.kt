@@ -5,8 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
 import android.speech.RecognizerIntent
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 const val TAG = "Nature Diary DBG"
 
@@ -16,9 +16,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Init SpeechEngine
+        Speech().initTextToSpeechEngine(this)
+
         //Getting Device ID so we can separate users without the need of login.
         val deviceId =
             Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
+        Log.d(TAG, deviceId)
 
         //Anonymous authentication.
         FB().authenticate()
@@ -27,16 +31,6 @@ class MainActivity : AppCompatActivity() {
         FB().upload(deviceId, "kalle", "dasd")
         FB().findAllById(deviceId)
 
-        Speech().initTextToSpeechEngine(this)
-
-        //Testing STT and TTS
-        btn_stt.setOnClickListener {
-            Speech().speechToText(this)
-        }
-
-        btn_tts.setOnClickListener {
-            Speech().textToSpeech(et_text_input)
-        }
     }
 
     //STT Results to TextView
@@ -48,7 +42,8 @@ class MainActivity : AppCompatActivity() {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
-                        et_text_input.setText(recognizedText)
+                        Log.d(TAG, recognizedText)
+                        //textView.text = recognizedText
                     }
                 }
             }
