@@ -7,6 +7,10 @@ import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 
 const val TAG = "Nature Diary DBG"
 
@@ -16,8 +20,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Init ViewPager
+        val pagerAdapter = ScreenSlidePagerAdapter(this)
+        pager.adapter = pagerAdapter
+
         //Init SpeechEngine
-        Speech().initTextToSpeechEngine(this)
+        SpeechAndText().initTextToSpeechEngine(this)
 
         //Getting Device ID so we can separate users without the need of login.
         val deviceId =
@@ -25,19 +33,41 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, deviceId)
 
         //Anonymous authentication.
-        FB().authenticate()
+        Firebase().authenticate()
 
         //Test upload and load.
-        FB().upload(deviceId, "kalle", "dasd")
-        FB().findAllById(deviceId)
+        Firebase().upload(deviceId, "kalle", "dasd")
+        Firebase().findAllById(deviceId)
 
+    }
+
+    private class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+        override fun getItemCount(): Int = 3
+
+        override fun createFragment(position: Int): Fragment =
+            when (position) {
+                0 -> FragmentMain()
+                1 -> FragmentList()
+                else -> FragmentList()
+            }
+    }
+
+    override fun onBackPressed() {
+        if (pager.currentItem == 0) {
+            // If the user is currently looking at the first step, allow the system to handle the
+            // Back button. This calls finish() on this activity and pops the back stack.
+            super.onBackPressed()
+        } else {
+            // Otherwise, select the previous step.
+            pager.currentItem = pager.currentItem - 1
+        }
     }
 
     //STT Results to TextView
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            Speech.REQUEST_CODE_STT -> {
+            SpeechAndText.REQUEST_CODE_STT -> {
                 if (resultCode == Activity.RESULT_OK && data != null) {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!result.isNullOrEmpty()) {
@@ -52,13 +82,14 @@ class MainActivity : AppCompatActivity() {
 
     //Avoid STT/TTS memory leaks
     override fun onPause() {
-        Speech.speechEngine.stop()
+        SpeechAndText.speechEngine.stop()
         super.onPause()
     }
 
     //Avoid STT/TTS memory leaks
     override fun onDestroy() {
-        Speech.speechEngine.shutdown()
+        SpeechAndText.speechEngine.shutdown()
         super.onDestroy()
     }
+
 }

@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class FB {
+class Firebase {
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
 

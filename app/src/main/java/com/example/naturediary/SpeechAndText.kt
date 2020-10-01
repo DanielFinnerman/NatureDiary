@@ -8,7 +8,7 @@ import android.speech.tts.TextToSpeech
 import android.widget.EditText
 import java.util.*
 
-class Speech {
+class SpeechAndText {
     companion object {
         const val REQUEST_CODE_STT = 1
         lateinit var speechEngine: TextToSpeech
