@@ -12,14 +12,14 @@ class SpeechAndText {
     companion object {
         const val REQUEST_CODE_STT = 1
         lateinit var speechEngine: TextToSpeech
-    }
 
-    fun initTextToSpeechEngine(context: Context) {
-        speechEngine = TextToSpeech(
-            context
-        ) { status ->
-            if (status == TextToSpeech.SUCCESS) {
-                speechEngine.language = Locale.ENGLISH
+        fun init(context: Context) {
+            speechEngine = TextToSpeech(
+                context
+            ) { status ->
+                if (status == TextToSpeech.SUCCESS) {
+                    speechEngine.language = Locale.ENGLISH
+                }
             }
         }
     }
@@ -43,7 +43,7 @@ class SpeechAndText {
         }
     }
 
-    fun stringToSpeech() {
-
+    fun stringToSpeech(string: String) {
+        speechEngine.speak(string, TextToSpeech.QUEUE_FLUSH, null, "sts")
     }
 }

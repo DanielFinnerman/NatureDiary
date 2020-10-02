@@ -52,6 +52,7 @@ class Firebase {
                 if (snap != null) {
                     for (i in snap) {
                         Log.d(TAG, "${i.data["name"]}")
+                        ListFiles.files.add(ListFile(i.data["id"].toString(), i.data["name"].toString(), i.data["location"].toString()))
                     }
                 } else {
                     Log.d(TAG, "No such document")

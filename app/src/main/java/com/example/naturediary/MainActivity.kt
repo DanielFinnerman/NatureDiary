@@ -1,15 +1,16 @@
 package com.example.naturediary
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 
 const val TAG = "Nature Diary DBG"
@@ -20,12 +21,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //Init ViewPager
-        val pagerAdapter = ScreenSlidePagerAdapter(this)
-        pager.adapter = pagerAdapter
+        getPermissions()
+
+        //Init context to Fragments
+        FragmentList.init(this)
+
+        //Init AudioPlayer
+        AudioPlayer.init(this)
 
         //Init SpeechEngine
-        SpeechAndText().initTextToSpeechEngine(this)
+        SpeechAndText.init(this)
+
+        //Init ViewPager
+        val pagerAdapter = SliderAdapter(this)
+        pager.adapter = pagerAdapter
 
         //Getting Device ID so we can separate users without the need of login.
         val deviceId =
@@ -36,29 +45,15 @@ class MainActivity : AppCompatActivity() {
         Firebase().authenticate()
 
         //Test upload and load.
-        Firebase().upload(deviceId, "kalle", "dasd")
+        Firebase().upload(deviceId, "Ville", "Myllikkä")
         Firebase().findAllById(deviceId)
 
     }
 
-    private class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 3
-
-        override fun createFragment(position: Int): Fragment =
-            when (position) {
-                0 -> FragmentMain()
-                1 -> FragmentList()
-                else -> FragmentList()
-            }
-    }
-
     override fun onBackPressed() {
         if (pager.currentItem == 0) {
-            // If the user is currently looking at the first step, allow the system to handle the
-            // Back button. This calls finish() on this activity and pops the back stack.
             super.onBackPressed()
         } else {
-            // Otherwise, select the previous step.
             pager.currentItem = pager.currentItem - 1
         }
     }
@@ -90,6 +85,23 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         SpeechAndText.speechEngine.shutdown()
         super.onDestroy()
+    }
+
+    private fun getPermissions() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ),
+                1
+            )
+        }
     }
 
 }
