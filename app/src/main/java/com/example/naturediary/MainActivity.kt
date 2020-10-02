@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_speech.*
 
 const val TAG = "Nature Diary DBG"
 
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         //Init context to Fragments
         FragmentList.init(this)
+        FragmentSpeech.init(this, this, pager)
 
         //Init AudioPlayer
         AudioPlayer.init(this)
@@ -68,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
                         Log.d(TAG, recognizedText)
-                        //textView.text = recognizedText
+                        etText.setText(recognizedText)
                     }
                 }
             }

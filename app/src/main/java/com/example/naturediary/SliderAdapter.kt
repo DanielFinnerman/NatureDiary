@@ -5,13 +5,14 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class SliderAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
-    override fun getItemCount(): Int = 3
+    override fun getItemCount(): Int = 4
 
     override fun createFragment(position: Int): Fragment =
         when (position) {
             0 -> FragmentMain()
-            1 -> FragmentRecord()
-            2 -> FragmentList()
+            1 -> FragmentSpeech()
+            2 -> FragmentRecord()
+            3 -> FragmentList()
             else -> FragmentList()
         }
 }

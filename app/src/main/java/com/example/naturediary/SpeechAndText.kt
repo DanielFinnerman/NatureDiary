@@ -6,6 +6,8 @@ import android.content.Intent
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.widget.EditText
+import androidx.viewpager2.widget.ViewPager2
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class SpeechAndText {
@@ -44,6 +46,16 @@ class SpeechAndText {
     }
 
     fun stringToSpeech(string: String) {
-        speechEngine.speak(string, TextToSpeech.QUEUE_FLUSH, null, "sts")
+        speechEngine.speak(string, TextToSpeech.QUEUE_FLUSH, null, "stt")
+    }
+
+    fun speechCommands(pager2: ViewPager2, string: String) {
+        when(string) {
+            "go to main" -> pager2.currentItem = 0
+            "go to speech" -> pager2.currentItem = 1
+            "go to record" -> pager2.currentItem = 2
+            "go to list" -> pager2.currentItem = 4
+            else -> speechEngine.speak("I can not understand that command.", TextToSpeech.QUEUE_FLUSH, null, "sc")
+        }
     }
 }
