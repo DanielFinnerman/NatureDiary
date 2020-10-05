@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "174770738868",
+    "firebase_url": "https://villelie-sensor-project.firebaseio.com",
+    "project_id": "villelie-sensor-project",
+    "storage_bucket": "villelie-sensor-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:174770738868:android:c77a6e2b5b7475116069e1",
+        "android_client_info": {
+          "package_name": "com.example.naturediary"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "174770738868-stufrtlupthm99l1vil8bh1p4h2jqi84.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYfiOGrmVCWVWeDlhlSLucYB5h3hiYyRA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "174770738868-stufrtlupthm99l1vil8bh1p4h2jqi84.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
