@@ -17,8 +17,12 @@ import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.location.*
 import java.util.*
 
+
+
 class Location {
 
+
+    //initializing variables to be used in other classes
     companion object {
         lateinit var mainContext: Context
 
@@ -26,11 +30,12 @@ class Location {
         private lateinit var locationRequest: LocationRequest
         private lateinit var locationCallback: LocationCallback
 
-        var locationString = "perse"
+        var locationString = ""
 
         private lateinit var mainLocationManager: LocationManager
         lateinit var mainActivity: Activity
 
+        //init fun to main
         fun init (context: Context, locationManager: LocationManager, activity: Activity) {
             mainContext = context
             mainLocationManager = locationManager
@@ -39,7 +44,7 @@ class Location {
         }
 
     }
-
+    //function to be used in main to get location data
      fun checkLocation() {
         val manager = mainLocationManager
         /*if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -68,14 +73,14 @@ class Location {
         locationRequest = LocationRequest()
         locationRequest.interval = 50000
         locationRequest.fastestInterval = 50000
-        locationRequest.smallestDisplacement = 170f //170 m = 0.1 mile
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY //according to your app
+        locationRequest.smallestDisplacement = 170f
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 locationResult ?: return
                 if (locationResult.locations.isNotEmpty()) {
                     val location = locationResult.lastLocation
-                    Log.e("asd", location.toString())
+                    Log.e(TAG, location.toString())
                     val addresses: List<Address>?
                     val geoCoder = Geocoder(mainContext, Locale.getDefault())
                     addresses = geoCoder.getFromLocation(
@@ -83,13 +88,14 @@ class Location {
                         locationResult.lastLocation.longitude,
                         1
                     )
+                    //return address to the textfield instead of coordinates
                     if (addresses != null && addresses.isNotEmpty()) {
                         val address: String = addresses[0].getAddressLine(0)
                         val city: String = addresses[0].locality
                         val country: String = addresses[0].countryName
-                        Log.e("asd", "$address $city$country")
+                        Log.e(TAG, "$address $city$country")
                         locationString = "$address"
-                        Log.d("asd", "maini upattu")
+                        Log.d(TAG, "loc upattu")
                         Firebase().upload(MainActivity.deviceId, "Dani", locationString)
                     }
                 }
@@ -97,6 +103,7 @@ class Location {
         }
     }
 
+    //check permissions for location
      fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
                 mainContext,
@@ -115,7 +122,7 @@ class Location {
         )
     }
 
-    // Stop location updates
+    // updates stopped onPause in MainActivity
      fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }

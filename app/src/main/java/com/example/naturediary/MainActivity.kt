@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //phones back-button to go back 1 page
     override fun onBackPressed() {
         if (pager.currentItem == 0) {
             super.onBackPressed()
@@ -88,12 +89,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //update location when active
     override fun onResume() {
         Location().startLocationUpdates()
         super.onResume()
     }
 
     //Avoid STT/TTS memory leaks
+    //stop updating location when app not in foreground
     override fun onPause() {
         SpeechAndText.speechEngine.stop()
         Location().stopLocationUpdates()
