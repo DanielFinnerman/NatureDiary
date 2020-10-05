@@ -68,6 +68,7 @@ class Location {
         dialog.show()
     }*/
 
+    //requests for location
     private fun getLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(mainActivity)
         locationRequest = LocationRequest()
