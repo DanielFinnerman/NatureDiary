@@ -2,8 +2,10 @@ package com.example.naturediary
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.speech.RecognizerIntent
@@ -33,6 +35,10 @@ class MainActivity : AppCompatActivity() {
 
         //Init SpeechEngine
         SpeechAndText.init(this)
+
+        //Init Location
+        Location.init(this, getSystemService(Context.LOCATION_SERVICE) as LocationManager, this)
+        Location().checkLocation()
 
         //Init ViewPager
         val pagerAdapter = SliderAdapter(this)
@@ -77,9 +83,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        Location().startLocationUpdates()
+        super.onResume()
+    }
+
     //Avoid STT/TTS memory leaks
     override fun onPause() {
         SpeechAndText.speechEngine.stop()
+        Location().stopLocationUpdates()
         super.onPause()
     }
 
@@ -99,7 +111,9 @@ class MainActivity : AppCompatActivity() {
                 this,
                 arrayOf(
                     Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
                 1
             )
