@@ -7,15 +7,17 @@ import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.widget.EditText
 import androidx.viewpager2.widget.ViewPager2
-import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class SpeechAndText {
     companion object {
         const val REQUEST_CODE_STT = 1
         lateinit var speechEngine: TextToSpeech
+        lateinit var mainActivity: Activity
+        var lastString: String = ""
 
-        fun init(context: Context) {
+        fun init(activity: Activity, context: Context) {
+            mainActivity = activity
             speechEngine = TextToSpeech(
                 context
             ) { status ->
@@ -26,16 +28,16 @@ class SpeechAndText {
         }
     }
 
-    fun speechToText(activity: Activity) {
+    fun speechToText() {
         val sttIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         sttIntent.putExtra(
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
-        sttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+        sttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH)
         sttIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now!")
 
-        activity.startActivityForResult(sttIntent, REQUEST_CODE_STT)
+        mainActivity.startActivityForResult(sttIntent, REQUEST_CODE_STT)
     }
 
     fun textToSpeech(editText: EditText) {
@@ -50,12 +52,26 @@ class SpeechAndText {
     }
 
     fun speechCommands(pager2: ViewPager2, string: String) {
-        when(string) {
-            "go to main" -> pager2.currentItem = 0
-            "go to speech" -> pager2.currentItem = 1
-            "go to record" -> pager2.currentItem = 2
-            "go to list" -> pager2.currentItem = 4
-            else -> speechEngine.speak("I can not understand that command.", TextToSpeech.QUEUE_FLUSH, null, "sc")
+        when {
+            string.contains("MAIN") -> {
+                pager2.currentItem = 0
+                SpeechAndText().stringToSpeech("You are in main page")
+            }
+            string.contains("LIST") -> pager2.currentItem = 4
+            string.contains("START RECORD") -> {
+                pager2.currentItem = 2
+                AudioPlayer().record()
+            }
+            string.contains("PLAY RECORD") -> {
+                pager2.currentItem = 2
+                AudioPlayer().play()
+            }
+            else -> speechEngine.speak(
+                "I can not understand that command.",
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                "sc"
+            )
         }
     }
 }
