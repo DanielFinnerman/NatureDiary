@@ -18,7 +18,6 @@ import com.google.android.gms.location.*
 import java.util.*
 
 
-
 class Location {
 
 
@@ -35,8 +34,8 @@ class Location {
         private lateinit var mainLocationManager: LocationManager
         lateinit var mainActivity: Activity
 
-        //init fun to main
-        fun init (context: Context, locationManager: LocationManager, activity: Activity) {
+        //init fun to main class
+        fun init(context: Context, locationManager: LocationManager, activity: Activity) {
             mainContext = context
             mainLocationManager = locationManager
             mainActivity = activity
@@ -44,8 +43,9 @@ class Location {
         }
 
     }
+
     //function to be used in main to get location data
-     fun checkLocation() {
+    fun checkLocation() {
         val manager = mainLocationManager
         /*if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             showAlertLocation()
@@ -105,7 +105,7 @@ class Location {
     }
 
     //check permissions for location
-     fun startLocationUpdates() {
+    fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
                 mainContext,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -124,10 +124,9 @@ class Location {
     }
 
     // updates stopped onPause in MainActivity
-     fun stopLocationUpdates() {
+    fun stopLocationUpdates() {
         fusedLocationClient.removeLocationUpdates(locationCallback)
     }
-
 
 
 }
