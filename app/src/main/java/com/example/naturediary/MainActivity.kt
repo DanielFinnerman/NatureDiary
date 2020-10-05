@@ -20,6 +20,10 @@ const val TAG = "Nature Diary DBG"
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        lateinit var deviceId: String
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -45,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         pager.adapter = pagerAdapter
 
         //Getting Device ID so we can separate users without the need of login.
-        val deviceId =
+        deviceId =
             Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         Log.d(TAG, deviceId)
 
@@ -53,7 +57,8 @@ class MainActivity : AppCompatActivity() {
         Firebase().authenticate()
 
         //Test upload and load.
-        Firebase().upload(deviceId, "Ville", "Myllikkä")
+        Firebase().upload(deviceId, "Ville", Location.locationString)
+        Log.d("asd", "maini upattu")
         Firebase().findAllById(deviceId)
 
     }

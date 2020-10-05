@@ -26,6 +26,8 @@ class Location {
         private lateinit var locationRequest: LocationRequest
         private lateinit var locationCallback: LocationCallback
 
+        var locationString = "perse"
+
         private lateinit var mainLocationManager: LocationManager
         lateinit var mainActivity: Activity
 
@@ -86,6 +88,9 @@ class Location {
                         val city: String = addresses[0].locality
                         val country: String = addresses[0].countryName
                         Log.e("asd", "$address $city$country")
+                        locationString = "$address"
+                        Log.d("asd", "maini upattu")
+                        Firebase().upload(MainActivity.deviceId, "Dani", locationString)
                     }
                 }
             }
