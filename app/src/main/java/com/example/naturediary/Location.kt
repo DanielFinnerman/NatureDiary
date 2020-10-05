@@ -118,7 +118,7 @@ class Location {
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
-            null /* Looper */
+            null //looper for request callback
         )
     }
 
