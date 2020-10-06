@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         getPermissions()
 
         //Init context to Fragments
+        FragmentMain.init(this)
         FragmentList.init(this)
         FragmentSpeech.init(this, this, pager)
 
