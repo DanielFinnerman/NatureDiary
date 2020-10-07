@@ -2,8 +2,10 @@ package com.example.naturediary
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
 import android.speech.RecognizerIntent
@@ -17,6 +19,10 @@ const val TAG = "Nature Diary DBG"
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        lateinit var deviceId: String
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -24,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         getPermissions()
 
         //Init context to Fragments
+        FragmentMain.init(this)
         FragmentList.init(this)
         FragmentSpeech.init(this, pager)
 
@@ -33,12 +40,16 @@ class MainActivity : AppCompatActivity() {
         //Init SpeechEngine
         SpeechAndText.init(this, this)
 
+        //Init Location
+        Location.init(this, getSystemService(Context.LOCATION_SERVICE) as LocationManager, this)
+        Location().checkLocation()
+
         //Init ViewPager
         val pagerAdapter = SliderAdapter(this)
         pager.adapter = pagerAdapter
 
         //Getting Device ID so we can separate users without the need of login.
-        val deviceId =
+        deviceId =
             Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         Log.d(TAG, deviceId)
 
@@ -46,16 +57,18 @@ class MainActivity : AppCompatActivity() {
         Firebase().authenticate()
 
         //Test upload and load.
-        Firebase().upload(deviceId, "Ville", "Myllikkä")
+        Firebase().upload(deviceId, "Ville", Location.locationString)
+        Log.d("asd", "maini upattu")
         Firebase().findAllById(deviceId)
 
-        btnSpeechCommand.setOnClickListener {
+        fab.setOnClickListener {
             AudioPlayer().stop()
             SpeechAndText().speechToText()
         }
 
     }
 
+    //phones back-button to go back 1 page
     override fun onBackPressed() {
         if (pager.currentItem == 0) {
             super.onBackPressed()
@@ -84,9 +97,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    //update location when active
+    override fun onResume() {
+        Location().startLocationUpdates()
+        super.onResume()
+    }
+
     //Avoid STT/TTS memory leaks
+    //stop updating location when app not in foreground
     override fun onPause() {
         SpeechAndText.speechEngine.stop()
+        Location().stopLocationUpdates()
         super.onPause()
     }
 
@@ -106,7 +127,9 @@ class MainActivity : AppCompatActivity() {
                 this,
                 arrayOf(
                     Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
                 ),
                 1
             )

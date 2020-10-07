@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import com.example.naturediary.ListFiles.files
-import kotlinx.android.synthetic.main.list.view.*
 import kotlinx.android.synthetic.main.minilist.view.*
 
-class ListFileAdapter(
+class MiniListFileAdapter(
     context: Context,
     private val dataSource: MutableList<ListFile>
 ) :
@@ -31,12 +29,15 @@ class ListFileAdapter(
     }
 
     override fun getView(pos: Int, conView: View?, parent: ViewGroup): View {
-        val rw = inflater.inflate(R.layout.list, parent, false)
-        val thisPos = files[pos]
+        val rw2 = inflater.inflate(R.layout.minilist, parent, false)
+        val thisPos = ListFiles.files[pos]
+        val threeLast = ListFiles.files.takeLast(3)
 
-        rw.tvList.text = "id: ${thisPos.id}, name: ${thisPos.name}, location: ${thisPos.location}."
 
-        return rw
+        rw2.tvMiniList.text = "id: ${thisPos.id}, name: ${thisPos.name}, location: ${thisPos.location}"
+
+        return rw2
     }
 
 }
+
