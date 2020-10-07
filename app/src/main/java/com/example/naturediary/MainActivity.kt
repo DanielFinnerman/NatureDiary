@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_speech.*
 
 const val TAG = "Nature Diary DBG"
 
@@ -33,13 +32,13 @@ class MainActivity : AppCompatActivity() {
         //Init context to Fragments
         FragmentMain.init(this)
         FragmentList.init(this)
-        FragmentSpeech.init(this, this, pager)
+        FragmentSpeech.init(this, pager)
 
         //Init AudioPlayer
         AudioPlayer.init(this)
 
         //Init SpeechEngine
-        SpeechAndText.init(this)
+        SpeechAndText.init(this, this)
 
         //Init Location
         Location.init(this, getSystemService(Context.LOCATION_SERVICE) as LocationManager, this)
@@ -62,6 +61,11 @@ class MainActivity : AppCompatActivity() {
         Log.d("asd", "maini upattu")
         Firebase().findAllById(deviceId)
 
+        fab.setOnClickListener {
+            AudioPlayer().stop()
+            SpeechAndText().speechToText()
+        }
+
     }
 
     //phones back-button to go back 1 page
@@ -82,8 +86,11 @@ class MainActivity : AppCompatActivity() {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
-                        Log.d(TAG, recognizedText)
-                        etText.setText(recognizedText)
+                        if (recognizedText.contains("perse" )) {
+                            SpeechAndText().speechCommands(pager, recognizedText.toUpperCase())
+                        } else {
+                            SpeechAndText.lastString = recognizedText
+                        }
                     }
                 }
             }
