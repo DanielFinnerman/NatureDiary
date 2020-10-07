@@ -1,0 +1,1 @@
+An accessible android nature sound capture application for visually impaired users with Google speech to text functionalities. Location and sound recording to firebase and return to list in the application
