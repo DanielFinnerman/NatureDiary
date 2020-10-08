@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">NatureDiary</string>
+    <string name="command_assistant_error">I could not understand that.</string>
+    <string name="command_assistant_location">You are in the</string>
+
+    <string name="command_go">GO</string>
+    <string name="command_page_main">MAIN</string>
+    <string name="command_page_record">RECORD</string>
+    <string name="command_page_list">LIST</string>
+
+    <string name="command_do"></string>
+    <string name="command_record">START RECORD</string>
+    <string name="command_play">PLAY</string>
 </resources>
