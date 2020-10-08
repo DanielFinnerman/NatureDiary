@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         getPermissions()
 
         //Init context to Fragments
-        FragmentMain.init(this)
+        FragmentRecord.init(pager)
         FragmentList.init(this)
 
         //Init AudioPlayer
@@ -40,8 +40,7 @@ class MainActivity : AppCompatActivity() {
         SpeechAndText.init(this, this)
 
         //Init Location
-        Location.init(this, getSystemService(Context.LOCATION_SERVICE) as LocationManager, this)
-        Location().checkLocation()
+        Location.init(this, this, getSystemService(Context.LOCATION_SERVICE) as LocationManager)
 
         //Init ViewPager
         val pagerAdapter = SliderAdapter(this)
@@ -52,22 +51,19 @@ class MainActivity : AppCompatActivity() {
             Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID)
         Log.d(TAG, deviceId)
 
-        //Anonymous authentication.
+        //Init Firebase
         Firebase().authenticate()
+        Firebase().updateList()
 
-        //Test upload and load.
-        Firebase().upload(deviceId, "Ville", Location.locationString)
-        Log.d("asd", "maini upattu")
-        Firebase().findAllById(deviceId)
+        Location().getLastLocation()
 
-        fab.setOnClickListener {
+        btnCommand.setOnClickListener {
             Recorder().stop()
             SpeechAndText().speechToText()
         }
-
     }
 
-    //phones back-button to go back 1 page
+    //Back-button to go back 1 page
     override fun onBackPressed() {
         if (pager.currentItem == 0) {
             super.onBackPressed()
@@ -95,7 +91,6 @@ class MainActivity : AppCompatActivity() {
 
     //update location when active
     override fun onResume() {
-        Location().startLocationUpdates()
         super.onResume()
     }
 
@@ -103,7 +98,6 @@ class MainActivity : AppCompatActivity() {
     //stop updating location when app not in foreground
     override fun onPause() {
         SpeechAndText.speechEngine.stop()
-        Location().stopLocationUpdates()
         super.onPause()
     }
 

@@ -58,18 +58,18 @@ class SpeechAndText {
             //"GO TO" commands.
             string.contains(mainContext.getString(R.string.command_go)) -> {
                 when {
-                    string.contains(mainContext.getString(R.string.command_page_main)) -> {
+                    string.contains(mainContext.getString(R.string.page_main)) -> {
                         pager2.currentItem = 0
                         SpeechAndText().stringToSpeech(
                             "${mainContext.getString(R.string.command_assistant_location)} " +
-                                    "${mainContext.getString(R.string.command_page_main)}"
+                                    "${mainContext.getString(R.string.page_main)}"
                         )
                     }
-                    string.contains(mainContext.getString(R.string.command_page_record)) -> {
+                    string.contains(mainContext.getString(R.string.page_record)) -> {
                         pager2.currentItem = 1
                         SpeechAndText().stringToSpeech(
                             "${mainContext.getString(R.string.command_assistant_location)} " +
-                                    "${mainContext.getString(R.string.command_page_record)}"
+                                    "${mainContext.getString(R.string.page_record)}"
                         )
 
                     }
@@ -77,7 +77,7 @@ class SpeechAndText {
                         pager2.currentItem = 2
                         SpeechAndText().stringToSpeech(
                              "${mainContext.getString(R.string.command_assistant_location)} " +
-                                    "${mainContext.getString(R.string.command_page_list)}"
+                                    "${mainContext.getString(R.string.page_list)}"
                         )
                     }
                 }

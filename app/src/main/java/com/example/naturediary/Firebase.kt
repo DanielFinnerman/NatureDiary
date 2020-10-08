@@ -23,14 +23,15 @@ class Firebase {
         }
     }
 
-    fun upload(id: String, name: String, location: String) {
+    fun upload(userId: String, title: String, location: String, fileName: String) {
         val data = hashMapOf(
-            "id" to id,
-            "name" to name,
-            "location" to location
+            "userId" to userId,
+            "title" to title,
+            "location" to location,
+            "fileName" to fileName
         )
         try {
-            db.collection(id).add(data)
+            db.collection(userId).add(data)
         } catch (e: Error) {
             Log.d(TAG, "upload error: $e")
         }
@@ -40,7 +41,7 @@ class Firebase {
         val ref = storage.reference.child("$userId/${file.name}")
         val uploadTask = ref.putFile(Uri.fromFile(file))
         uploadTask.addOnSuccessListener {
-
+            Log.d(TAG, "filu up")
         }.addOnFailureListener {
             Log.d(TAG, "vittu")
         }
@@ -59,31 +60,18 @@ class Firebase {
         }
     }
 
-    fun findById(id: String) {
-        db.collection("ville").document(id).get()
-            .addOnSuccessListener { snap ->
-                if (snap != null) {
-                    Log.d(TAG, "${snap.data}")
-                } else {
-                    Log.d(TAG, "No such document")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.d(TAG, "get failed with ", exception)
-            }
-    }
-
-    fun findAllById(id: String) {
-        db.collection(id).get()
+    fun updateList() {
+        ListFiles.files.clear()
+        db.collection(MainActivity.deviceId).get()
             .addOnSuccessListener { snap ->
                 if (snap != null) {
                     for (i in snap) {
-                        Log.d(TAG, "${i.data["name"]}")
                         ListFiles.files.add(
                             ListFile(
-                                i.data["id"].toString(),
-                                i.data["name"].toString(),
-                                i.data["location"].toString()
+                                i.data["userId"].toString(),
+                                i.data["title"].toString(),
+                                i.data["location"].toString(),
+                                i.data["fileName"].toString()
                             )
                         )
                     }

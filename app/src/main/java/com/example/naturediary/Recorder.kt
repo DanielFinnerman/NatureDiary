@@ -79,7 +79,6 @@ class Recorder {
     }
 
     fun play() {
-        Firebase().uploadRecording(MainActivity.deviceId, currentFile)
         val stream = FileInputStream(currentFile)
         try {
             GlobalScope.launch(Dispatchers.Main) {
@@ -139,6 +138,5 @@ class Recorder {
 
     fun stop() {
         isRecording = false
-        Firebase().downloadRecording(MainActivity.deviceId, "1602160364618")
     }
 }
