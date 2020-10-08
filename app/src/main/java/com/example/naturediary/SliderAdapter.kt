@@ -10,9 +10,9 @@ class SliderAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(f
     override fun createFragment(position: Int): Fragment =
         when (position) {
             0 -> FragmentMain()
-            1 -> FragmentSpeech()
-            2 -> FragmentRecord()
-            3 -> FragmentList()
+            1 -> FragmentRecord()
+            2 -> FragmentList()
+            3 -> FragmentSettings()
             else -> FragmentList()
         }
 }

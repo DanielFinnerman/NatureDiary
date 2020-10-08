@@ -10,12 +10,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.*
 
-class AudioPlayer {
+class Recorder {
 
     companion object {
         lateinit var mainContext: Context
+        lateinit var currentFile: File
 
-        private lateinit var recFile: File
         private var isRecording = false
         private var isPlaying = false
 
@@ -25,16 +25,15 @@ class AudioPlayer {
     }
 
     fun record() {
-        val recFileName = "rec.raw"
         val storageDir = mainContext.getExternalFilesDir((Environment.DIRECTORY_MUSIC))
         try {
-            recFile = File("${storageDir.toString()}/$recFileName")
+            currentFile = File("${storageDir.toString()}/${System.currentTimeMillis()}")
         } catch (e: IOException) {
             Log.d(TAG, "recFile error: $e")
         }
 
         try {
-            val outStream = FileOutputStream(recFile)
+            val outStream = FileOutputStream(currentFile)
             val bufferedOutStream = BufferedOutputStream(outStream)
             val dataOutSteam = DataOutputStream(bufferedOutStream)
 
@@ -80,7 +79,8 @@ class AudioPlayer {
     }
 
     fun play() {
-        val stream = FileInputStream(recFile)
+        Firebase().uploadRecording(MainActivity.deviceId, currentFile)
+        val stream = FileInputStream(currentFile)
         try {
             GlobalScope.launch(Dispatchers.Main) {
                 isPlaying = true
@@ -139,5 +139,6 @@ class AudioPlayer {
 
     fun stop() {
         isRecording = false
+        Firebase().downloadRecording(MainActivity.deviceId, "1602160364618")
     }
 }

@@ -14,15 +14,17 @@ class SpeechAndText {
         const val REQUEST_CODE_STT = 1
         lateinit var speechEngine: TextToSpeech
         lateinit var mainActivity: Activity
+        lateinit var mainContext: Context
         var lastString: String = ""
 
         fun init(activity: Activity, context: Context) {
             mainActivity = activity
+            mainContext = context
             speechEngine = TextToSpeech(
                 context
             ) { status ->
                 if (status == TextToSpeech.SUCCESS) {
-                    speechEngine.language = Locale.ENGLISH
+                    speechEngine.language = Locale.UK
                 }
             }
         }
@@ -34,8 +36,8 @@ class SpeechAndText {
             RecognizerIntent.EXTRA_LANGUAGE_MODEL,
             RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
         )
-        sttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.ENGLISH)
-        sttIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now!")
+        sttIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.UK)
+        sttIntent.putExtra(RecognizerIntent.EXTRA_PROMPT, "speak")
 
         mainActivity.startActivityForResult(sttIntent, REQUEST_CODE_STT)
     }
@@ -53,21 +55,40 @@ class SpeechAndText {
 
     fun speechCommands(pager2: ViewPager2, string: String) {
         when {
-            string.contains("MAIN") -> {
-                pager2.currentItem = 0
-                SpeechAndText().stringToSpeech("You are in main page")
+            //"GO TO" commands.
+            string.contains(mainContext.getString(R.string.command_go)) -> {
+                when {
+                    string.contains(mainContext.getString(R.string.command_page_main)) -> {
+                        pager2.currentItem = 0
+                        SpeechAndText().stringToSpeech(
+                            "${mainContext.getString(R.string.command_assistant_location)} " +
+                                    "${mainContext.getString(R.string.command_page_main)}"
+                        )
+                    }
+                    string.contains(mainContext.getString(R.string.command_page_record)) -> {
+                        pager2.currentItem = 1
+                        SpeechAndText().stringToSpeech(
+                            "${mainContext.getString(R.string.command_assistant_location)} " +
+                                    "${mainContext.getString(R.string.command_page_record)}"
+                        )
+
+                    }
+                    string.contains(mainContext.getString(R.string.command_go)) -> {
+                        pager2.currentItem = 2
+                        SpeechAndText().stringToSpeech(
+                             "${mainContext.getString(R.string.command_assistant_location)} " +
+                                    "${mainContext.getString(R.string.command_page_list)}"
+                        )
+                    }
+                }
             }
-            string.contains("LIST") -> pager2.currentItem = 4
-            string.contains("START RECORD") -> {
-                pager2.currentItem = 2
-                AudioPlayer().record()
-            }
-            string.contains("PLAY RECORD") -> {
-                pager2.currentItem = 2
-                AudioPlayer().play()
+            //Other commands
+            string.contains(mainContext.getString(R.string.command_record)) -> {
+                pager2.currentItem = 1
+                Recorder().record()
             }
             else -> speechEngine.speak(
-                "I can not understand that command.",
+                mainContext.getString(R.string.command_assistant_error),
                 TextToSpeech.QUEUE_FLUSH,
                 null,
                 "sc"
