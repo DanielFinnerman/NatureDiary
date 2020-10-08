@@ -15,9 +15,9 @@ class FragmentRecord : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_record, container, false)
-        view.btnRecord.setOnClickListener { AudioPlayer().record() }
-        view.btnPlay.setOnClickListener { AudioPlayer().play() }
-        view.btnStop.setOnClickListener { AudioPlayer().stop() }
+        view.btnRecord.setOnClickListener { Recorder().record() }
+        view.btnPlay.setOnClickListener { Recorder().play() }
+        view.btnStop.setOnClickListener { Recorder().stop() }
         return view
     }
 }

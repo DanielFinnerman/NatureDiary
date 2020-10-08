@@ -32,10 +32,9 @@ class MainActivity : AppCompatActivity() {
         //Init context to Fragments
         FragmentMain.init(this)
         FragmentList.init(this)
-        FragmentSpeech.init(this, pager)
 
         //Init AudioPlayer
-        AudioPlayer.init(this)
+        Recorder.init(this)
 
         //Init SpeechEngine
         SpeechAndText.init(this, this)
@@ -62,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         Firebase().findAllById(deviceId)
 
         fab.setOnClickListener {
-            AudioPlayer().stop()
+            Recorder().stop()
             SpeechAndText().speechToText()
         }
 
@@ -86,11 +85,8 @@ class MainActivity : AppCompatActivity() {
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
                     if (!result.isNullOrEmpty()) {
                         val recognizedText = result[0]
-                        if (recognizedText.contains("perse" )) {
-                            SpeechAndText().speechCommands(pager, recognizedText.toUpperCase())
-                        } else {
-                            SpeechAndText.lastString = recognizedText
-                        }
+                        SpeechAndText().speechCommands(pager, recognizedText.toUpperCase())
+                        SpeechAndText.lastString = recognizedText
                     }
                 }
             }
