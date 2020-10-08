@@ -4,3 +4,10 @@ Location
 Google speech to text and commands  
 Firebase  
 Material Design  
+
+Activity  
+Fragments  
+Firebase as storage and connection  
+Microphone as hardware, audiorecorder and speech to text -api  
+GPS to get location  
+
