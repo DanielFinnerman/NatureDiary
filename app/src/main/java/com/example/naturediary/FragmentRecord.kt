@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.fragment_record.*
 import kotlinx.android.synthetic.main.fragment_record.view.*
 
 class FragmentRecord : Fragment() {
-  
+
     companion object {
         lateinit var mainPager: ViewPager2
 
@@ -35,7 +35,8 @@ class FragmentRecord : Fragment() {
             chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
             chronometer.start()
             view.btnRecord.isClickable = false
-            view.btnStop.isClickable = true}
+            view.btnStop.isClickable = true
+        }
         view.btnPlay.setOnClickListener { Recorder().play() }
         view.btnStop.setOnClickListener { Recorder().stop() }
         view.btnSave.setOnClickListener {
