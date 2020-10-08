@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
+import kotlinx.android.synthetic.main.fragment_record.*
 import kotlinx.android.synthetic.main.fragment_record.view.*
 
 class FragmentRecord : Fragment() {
@@ -18,6 +19,8 @@ class FragmentRecord : Fragment() {
             mainPager = pager2
         }
     }
+
+    var timeWhenStopped = 0L
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,7 +35,8 @@ class FragmentRecord : Fragment() {
             chronometer.base = SystemClock.elapsedRealtime() + timeWhenStopped
             chronometer.start()
             view.btnRecord.isClickable = false
-            view.btnStop.isClickable = true}
+            view.btnStop.isClickable = true
+        }
         view.btnPlay.setOnClickListener { Recorder().play() }
         view.btnStop.setOnClickListener { Recorder().stop() }
         view.btnSave.setOnClickListener {

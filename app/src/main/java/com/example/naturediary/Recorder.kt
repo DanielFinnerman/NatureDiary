@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.*
 import android.os.Environment
 import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -16,11 +17,12 @@ class Recorder {
         lateinit var mainContext: Context
         lateinit var currentFile: File
 
-        private var isRecording = false
-        private var isPlaying = false
+        var isRecording = false
+        var isPlaying: MutableLiveData<Boolean> = MutableLiveData()
 
         fun init(context: Context) {
             mainContext = context
+            isPlaying.value = false
         }
     }
 
@@ -82,7 +84,7 @@ class Recorder {
         val stream = FileInputStream(currentFile)
         try {
             GlobalScope.launch(Dispatchers.Main) {
-                isPlaying = true
+                isPlaying.value = true
                 withContext(Dispatchers.IO) {
                     val minBufferSize =
                         AudioTrack.getMinBufferSize(
@@ -113,14 +115,13 @@ class Recorder {
 
                     try {
                         var time = stream.read(buffer, 0, minBufferSize)
-                        while (time != -1 && isPlaying) {
+                        while (time != -1 && isPlaying.value == true) {
                             track.write(buffer, 0, time)
                             time = stream.read(buffer, 0, minBufferSize)
                         }
                     } catch (e: IOException) {
                         Log.d(TAG, "$e")
                     }
-
                     try {
                         stream.close()
                     } catch (e: IOException) {
@@ -130,6 +131,7 @@ class Recorder {
                     track.stop()
                     track.release()
                 }
+                isPlaying.value = false
             }
         } catch (e: IOException) {
             Log.d(TAG, "$e")
@@ -138,5 +140,6 @@ class Recorder {
 
     fun stop() {
         isRecording = false
+        isPlaying.value = false
     }
 }

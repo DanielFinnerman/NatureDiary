@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         getPermissions()
 
         //Init context to Fragments
-        FragmentRecord.init(pager)
+        FragmentRecord.init(this, this, pager)
         FragmentList.init(this)
 
         //Init AudioPlayer
@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         //Init Location
         Location.init(this, this, getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        Location().getLastLocation()
 
         //Init ViewPager
         val pagerAdapter = SliderAdapter(this)
@@ -54,8 +55,6 @@ class MainActivity : AppCompatActivity() {
         //Init Firebase
         Firebase().authenticate()
         Firebase().updateList()
-
-        Location().getLastLocation()
 
         btnCommand.setOnClickListener {
             Recorder().stop()

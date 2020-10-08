@@ -3,6 +3,7 @@ package com.example.naturediary
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -25,6 +26,7 @@ class Firebase {
 
     fun upload(userId: String, title: String, location: String, fileName: String) {
         val data = hashMapOf(
+            "createdAt" to System.currentTimeMillis(),
             "userId" to userId,
             "title" to title,
             "location" to location,
@@ -62,12 +64,13 @@ class Firebase {
 
     fun updateList() {
         ListFiles.files.clear()
-        db.collection(MainActivity.deviceId).get()
+        db.collection(MainActivity.deviceId).orderBy("createdAt", Query.Direction.DESCENDING).get()
             .addOnSuccessListener { snap ->
                 if (snap != null) {
                     for (i in snap) {
                         ListFiles.files.add(
                             ListFile(
+                                i.data["createdAt"].toString(),
                                 i.data["userId"].toString(),
                                 i.data["title"].toString(),
                                 i.data["location"].toString(),

@@ -11,8 +11,11 @@
     <string name="command_go">GO</string>
     <string name="command_record">START RECORD</string>
     <string name="command_play">PLAY</string>
+    <string name="command_stop">STOP</string>
     <string name="command_remove">REMOVE</string>
 
     <string name="command_assistant_error">I could not understand that.</string>
     <string name="command_assistant_location">You are in the</string>
+
+    <string name="tip_title">Give title to your recording</string>
 </resources>
