@@ -91,14 +91,16 @@ class SpeechAndText {
                 }
             }
             //Other commands
+            /*
             string.contains(mainContext.getString(R.string.command_record)) -> {
                 pager2.currentItem = 1
-                //btnRecord.performClick()
+
             }
             string.contains(mainContext.getString(R.string.command_play)) -> {
                 pager2.currentItem = 1
-                //btnPlayStop.performClick()
+
             }
+            */
             else -> speechEngine.speak(
                 mainContext.getString(R.string.command_assistant_error),
                 TextToSpeech.QUEUE_FLUSH,

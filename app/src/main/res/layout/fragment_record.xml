@@ -33,44 +33,31 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvRecordName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvTitle" />
-
             <Chronometer
                 android:id="@+id/chronometer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="@color/actionTextColor"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvRecordName" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnRecord"
+            <TextView
+                android:id="@+id/tvRecordName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Record"
-                app:icon="@drawable/ic_baseline_fiber_manual_record_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnPlayStop"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/chronometer" />
+                app:layout_constraintTop_toBottomOf="@+id/chronometer" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnPlayStop"
@@ -79,13 +66,25 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
                 android:text="Play"
                 app:icon="@drawable/ic_baseline_play_arrow_24"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnRecord"
-                app:layout_constraintTop_toBottomOf="@id/chronometer" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvRecordName" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRecord"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="Record"
+                app:backgroundTint="@color/accent"
+                app:icon="@drawable/ic_baseline_fiber_manual_record_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnPlayStop" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -131,18 +130,20 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:text="Save"
+                app:backgroundTint="@color/info"
                 app:icon="@drawable/ic_baseline_save_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/etTitle" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

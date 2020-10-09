@@ -74,9 +74,7 @@ class FragmentRecord : Fragment() {
         }
 
         Recorder.fileName.observe(mainLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                view.tvRecordName.text = "Filename - $it"
-            } else view.tvRecordName.text = ""
+            if (it.isNotEmpty()) view.tvRecordName.text = it
         }
 
         view.btnSave.setOnClickListener {
@@ -88,6 +86,7 @@ class FragmentRecord : Fragment() {
                 Location.locationString.value.toString(),
                 Recorder.currentFile.name
             )
+            view.etTitle.text.clear()
             FirebaseClass().updateList()
             mainPager.currentItem = 2
         }
