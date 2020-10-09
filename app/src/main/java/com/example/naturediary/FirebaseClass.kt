@@ -2,14 +2,16 @@ package com.example.naturediary
 
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import kotlinx.android.synthetic.main.list.view.*
 import java.io.File
 
-class Firebase {
+class FirebaseClass {
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
     private val storage = Firebase.storage
@@ -60,6 +62,28 @@ class Firebase {
         }.addOnFailureListener {
             Log.d(TAG, "vittu")
         }
+    }
+
+    fun getLastItem(view: View) {
+        db.collection(MainActivity.deviceId).orderBy("createdAt")
+            .limitToLast(1).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    view.tvTitle.text = document.documents[0].data?.get("title").toString()
+                    view.tvSubTitle.text = document.documents[0].data?.get("location").toString()
+                    view.btnPlayFromList.setOnClickListener {
+                        FirebaseClass().downloadRecording(
+                            MainActivity.deviceId,
+                            document.documents[0].data?.get("fileName").toString()
+                        )
+                    }
+                } else {
+                    Log.d(TAG, "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
+            }
     }
 
     fun updateList() {

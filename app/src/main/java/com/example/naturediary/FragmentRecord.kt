@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_record.view.*
@@ -76,14 +75,14 @@ class FragmentRecord : Fragment() {
         }
         view.btnSave.setOnClickListener {
             Location().getLastLocation()
-            Firebase().uploadRecording(MainActivity.deviceId, Recorder.currentFile)
-            Firebase().upload(
+            FirebaseClass().uploadRecording(MainActivity.deviceId, Recorder.currentFile)
+            FirebaseClass().upload(
                 MainActivity.deviceId,
                 "${view.etTitle.text}",
-                Location.locationString,
+                Location.locationString.value.toString(),
                 Recorder.currentFile.name
             )
-            Firebase().updateList()
+            FirebaseClass().updateList()
             mainPager.currentItem = 2
         }
         return view

@@ -30,16 +30,15 @@ class ListFileAdapter(
     }
 
     override fun getView(pos: Int, conView: View?, parent: ViewGroup): View {
-        val rw = inflater.inflate(R.layout.list, parent, false)
+        val view = inflater.inflate(R.layout.list, parent, false)
         val thisPos = files[pos]
 
-        rw.tvTitle.text = "${thisPos.title}."
-        rw.tvSubTitle.text = "${thisPos.location}"
-        rw.btnPlayFromList.setOnClickListener {
-            Firebase().downloadRecording(MainActivity.deviceId, "${thisPos.fileName}")
+        view.tvTitle.text = "${thisPos.title}."
+        view.tvSubTitle.text = "${thisPos.location}"
+        view.btnPlayFromList.setOnClickListener {
+            FirebaseClass().downloadRecording(MainActivity.deviceId, "${thisPos.fileName}")
         }
-
-        return rw
+        return view
     }
 
 }
