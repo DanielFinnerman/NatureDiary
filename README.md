@@ -28,6 +28,7 @@ An accessible android nature sound capture application for visually impaired use
 * GPS to get location
 * Openstreetmap Map
 * SplashScreen
+* LiveData
 
 
 ## Getting Started
