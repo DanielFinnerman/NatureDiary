@@ -71,8 +71,14 @@ class FragmentRecord : Fragment() {
                     Recorder().stop()
                 }
             }
-
         }
+
+        Recorder.fileName.observe(mainLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                view.tvRecordName.text = "Filename - $it"
+            } else view.tvRecordName.text = ""
+        }
+
         view.btnSave.setOnClickListener {
             Location().getLastLocation()
             FirebaseClass().uploadRecording(MainActivity.deviceId, Recorder.currentFile)

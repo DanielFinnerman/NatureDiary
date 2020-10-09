@@ -27,15 +27,16 @@ class FirebaseClass {
     }
 
     fun upload(userId: String, title: String, location: String, fileName: String) {
+        val timestamp = System.currentTimeMillis()
         val data = hashMapOf(
-            "createdAt" to System.currentTimeMillis(),
+            "createdAt" to timestamp,
             "userId" to userId,
             "title" to title,
             "location" to location,
             "fileName" to fileName
         )
         try {
-            db.collection(userId).add(data)
+            db.collection(userId).document(timestamp.toString()).set(data)
         } catch (e: Error) {
             Log.d(TAG, "upload error: $e")
         }
@@ -54,10 +55,11 @@ class FirebaseClass {
 
     fun downloadRecording(userId: String, fileName: String) {
         val ref = storage.reference.child("$userId/${fileName}")
-        val localFile = File.createTempFile("record", "pcm")
+        val localFile = File.createTempFile("temp", ".pcm")
         val downloadTask = ref.getFile(localFile)
         downloadTask.addOnSuccessListener {
             Recorder.currentFile = localFile
+            Recorder.fileName.value = localFile.name
             Recorder().play()
         }.addOnFailureListener {
             Log.d(TAG, "vittu")
@@ -68,14 +70,17 @@ class FirebaseClass {
         db.collection(MainActivity.deviceId).orderBy("createdAt")
             .limitToLast(1).get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    view.tvTitle.text = document.documents[0].data?.get("title").toString()
-                    view.tvSubTitle.text = document.documents[0].data?.get("location").toString()
-                    view.btnPlayFromList.setOnClickListener {
-                        FirebaseClass().downloadRecording(
-                            MainActivity.deviceId,
-                            document.documents[0].data?.get("fileName").toString()
-                        )
+                if (document.documents != null) {
+                    for (i in document) {
+                        view.tvTitle.text = i.data["title"].toString()
+                        view.tvSubTitle.text =
+                            i.data["location"].toString()
+                        view.btnPlayFromList.setOnClickListener {
+                            FirebaseClass().downloadRecording(
+                                MainActivity.deviceId,
+                                i.data["fileName"].toString()
+                            )
+                        }
                     }
                 } else {
                     Log.d(TAG, "No such document")
@@ -109,6 +114,15 @@ class FirebaseClass {
             .addOnFailureListener { exception ->
                 Log.d(TAG, "get failed with ", exception)
             }
+    }
+
+    fun deleteFile(createdAt: String) {
+        db.collection(MainActivity.deviceId).document(createdAt).delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                updateList()
+            }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 
 }

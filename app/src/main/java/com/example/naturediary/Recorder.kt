@@ -19,10 +19,12 @@ class Recorder {
 
         var isRecording = false
         var isPlaying: MutableLiveData<Boolean> = MutableLiveData()
+        var fileName: MutableLiveData<String> = MutableLiveData()
 
         fun init(context: Context) {
             mainContext = context
             isPlaying.value = false
+            fileName.value = ""
         }
     }
 
@@ -30,6 +32,7 @@ class Recorder {
         val storageDir = mainContext.getExternalFilesDir((Environment.DIRECTORY_MUSIC))
         try {
             currentFile = File("${storageDir.toString()}/${System.currentTimeMillis()}")
+            fileName.value = currentFile.name
         } catch (e: IOException) {
             Log.d(TAG, "recFile error: $e")
         }
