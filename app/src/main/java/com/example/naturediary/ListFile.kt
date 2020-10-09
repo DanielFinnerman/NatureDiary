@@ -1,5 +1,6 @@
 package com.example.naturediary
 
+//ListFile
 class ListFile(val createdAt: String, val userId: String, val title: String, val location: String, val fileName: String) {
 
     override fun toString(): String {

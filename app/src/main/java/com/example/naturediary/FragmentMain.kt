@@ -11,6 +11,7 @@ import androidx.lifecycle.observe
 import kotlinx.android.synthetic.main.fragment_main.view.*
 import org.osmdroid.util.GeoPoint
 
+//FragmentMain
 class FragmentMain : Fragment() {
 
     override fun onCreateView(
@@ -18,7 +19,10 @@ class FragmentMain : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //Inflate fragment view
         val view = inflater.inflate(R.layout.fragment_main, container, false)
+
+        //OnClick to open Google Maps from current location
         view.cardLocation.setOnClickListener {
             val gmmIntentUri = Uri.parse("geo:0,0?q=${Location.locationString.value}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
@@ -28,6 +32,7 @@ class FragmentMain : Fragment() {
 
         FirebaseClass().getLastItem(view)
 
+        //Observe locationString LiveData to update locationView and map
         Location.locationString.observe(FragmentRecord.mainLifecycleOwner) {
             view.tvCurrentLocation.text = it
             view.mapView.controller.setZoom(18.0)

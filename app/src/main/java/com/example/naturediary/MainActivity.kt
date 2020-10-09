@@ -19,6 +19,7 @@ import org.osmdroid.config.Configuration
 
 const val TAG = "Nature Diary DBG"
 
+//MainActivity
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         FirebaseClass().authenticate()
         FirebaseClass().updateList()
 
+        //Command button, stops recorder and starts to listen commands
         btnCommand.setOnClickListener {
             Recorder().stop()
             SpeechAndText().speechToText()
@@ -110,6 +112,7 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    //Get needed permissions
     private fun getPermissions() {
         if (
             ContextCompat.checkSelfPermission(

@@ -12,10 +12,18 @@
     <string name="command_record">START RECORD</string>
     <string name="command_play">PLAY</string>
     <string name="command_stop">STOP</string>
+    <string name="command_save">SAVE</string>
     <string name="command_remove">REMOVE</string>
+    <string name="command_remove_all">REMOVE ALL DATA</string>
 
     <string name="command_assistant_error">I could not understand that.</string>
     <string name="command_assistant_location">You are in the</string>
 
     <string name="tip_title">Give title to your recording</string>
+    <string name="title_location">Your current location</string>
+    <string name="title_last_record">Your latest recording</string>
+    <string name="title_recorder">Recorder</string>
+    <string name="title_list">List of your recordings</string>
+    <string name="title_settings">Settings</string>
+
 </resources>
