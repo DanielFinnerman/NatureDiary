@@ -8,6 +8,7 @@ import android.widget.BaseAdapter
 import com.example.naturediary.ListFiles.files
 import kotlinx.android.synthetic.main.list.view.*
 
+//ListFileAdapter
 class ListFileAdapter(
     context: Context,
     private val dataSource: MutableList<ListFile>
@@ -29,11 +30,12 @@ class ListFileAdapter(
         return pos.toLong()
     }
 
+    //Inflate list.xml
     override fun getView(pos: Int, conView: View?, parent: ViewGroup): View {
         val view = inflater.inflate(R.layout.list, parent, false)
         val thisPos = files[pos]
 
-        view.tvTitle.text = "${thisPos.title}."
+        view.tvTitle.text = "${thisPos.title}"
         view.tvSubTitle.text = "${thisPos.location}"
         view.btnPlayFromList.setOnClickListener {
             FirebaseClass().downloadRecording(MainActivity.deviceId, "${thisPos.fileName}")

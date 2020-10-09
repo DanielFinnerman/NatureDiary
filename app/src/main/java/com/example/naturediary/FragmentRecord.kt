@@ -13,6 +13,7 @@ import androidx.lifecycle.observe
 import androidx.viewpager2.widget.ViewPager2
 import kotlinx.android.synthetic.main.fragment_record.view.*
 
+//FragmentRecord
 class FragmentRecord : Fragment() {
 
     companion object {
@@ -20,6 +21,7 @@ class FragmentRecord : Fragment() {
         lateinit var mainLifecycleOwner: LifecycleOwner
         lateinit var mainPager: ViewPager2
 
+        //Init takes context from MainActivity
         fun init(context: Context, lifecycleOwner: LifecycleOwner, pager2: ViewPager2) {
             mainContext = context
             mainLifecycleOwner = lifecycleOwner
@@ -32,6 +34,7 @@ class FragmentRecord : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //Inflate fragment content
         val view = inflater.inflate(R.layout.fragment_record, container, false)
         view.btnRecord.setOnClickListener {
             view.btnPlayStop.text = getString(R.string.command_stop)
@@ -41,6 +44,7 @@ class FragmentRecord : Fragment() {
             view.chronometer.start()
         }
         view.btnPlayStop.setOnClickListener {
+            //Change button text and icon accordingly
             when (view.btnPlayStop.text) {
                 getString(R.string.command_play) -> {
                     view.btnPlayStop.text = getString(R.string.command_stop)
@@ -48,6 +52,7 @@ class FragmentRecord : Fragment() {
                     view.chronometer.base = SystemClock.elapsedRealtime()
                     view.chronometer.start()
                     Recorder().play()
+                    //Observe isPlaying LiveData to change counter accordingly
                     Recorder.isPlaying.observe(mainLifecycleOwner) {
                         Log.d(TAG, "IT is $it")
                         when (it) {
@@ -73,10 +78,12 @@ class FragmentRecord : Fragment() {
             }
         }
 
+        //Observe fileName LiveData to change currently recorded/playing filename
         Recorder.fileName.observe(mainLifecycleOwner) {
             if (it.isNotEmpty()) view.tvRecordName.text = it
         }
 
+        //Save and upload file to storage and data to database
         view.btnSave.setOnClickListener {
             Location().getLastLocation()
             FirebaseClass().uploadRecording(MainActivity.deviceId, Recorder.currentFile)

@@ -9,6 +9,8 @@ import android.widget.EditText
 import androidx.viewpager2.widget.ViewPager2
 import java.util.*
 
+
+//SpeechAndText class contains functions to speech API
 class SpeechAndText {
     companion object {
         const val REQUEST_CODE_STT = 1
@@ -18,6 +20,7 @@ class SpeechAndText {
 
         var lastString: String = ""
 
+        //Init takes context from MainActivity
         fun init(activity: Activity, context: Context) {
             mainActivity = activity
             mainContext = context
@@ -31,6 +34,7 @@ class SpeechAndText {
         }
     }
 
+    //Starts intent to listen speech
     fun speechToText() {
         val sttIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         sttIntent.putExtra(
@@ -43,6 +47,7 @@ class SpeechAndText {
         mainActivity.startActivityForResult(sttIntent, REQUEST_CODE_STT)
     }
 
+    //Speaks given textEdit - UNUSED
     fun textToSpeech(editText: EditText) {
         val string = editText.text.toString().trim()
         if (string.isNotEmpty()) {
@@ -50,10 +55,12 @@ class SpeechAndText {
         }
     }
 
+    //Speaks given string, used for saying things when
     fun stringToSpeech(string: String) {
         speechEngine.speak(string, TextToSpeech.QUEUE_FLUSH, null, "stt")
     }
 
+    //Listens to speech commands, and controls the app accordingly
     fun speechCommands(pager2: ViewPager2, string: String) {
         when {
             //"GO TO" commands.
@@ -90,10 +97,11 @@ class SpeechAndText {
                     }
                 }
             }
-            //Other commands
+            //Other commands NOT IN USE
             /*
             string.contains(mainContext.getString(R.string.command_record)) -> {
                 pager2.currentItem = 1
+                //BUTTON.performClick()
 
             }
             string.contains(mainContext.getString(R.string.command_play)) -> {

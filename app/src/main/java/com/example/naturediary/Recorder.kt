@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.*
 
+//Recorder
 class Recorder {
 
     companion object {
@@ -21,6 +22,7 @@ class Recorder {
         var isPlaying: MutableLiveData<Boolean> = MutableLiveData()
         var fileName: MutableLiveData<String> = MutableLiveData()
 
+        //Init takes context from MainActivity
         fun init(context: Context) {
             mainContext = context
             isPlaying.value = false
@@ -28,6 +30,7 @@ class Recorder {
         }
     }
 
+    //Record audio
     fun record() {
         val storageDir = mainContext.getExternalFilesDir((Environment.DIRECTORY_MUSIC))
         try {
@@ -83,6 +86,7 @@ class Recorder {
         }
     }
 
+    //Play audio
     fun play() {
         val stream = FileInputStream(currentFile)
         try {
@@ -141,6 +145,7 @@ class Recorder {
         }
     }
 
+    //Stop recording and playing
     fun stop() {
         isRecording = false
         isPlaying.value = false

@@ -14,7 +14,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import java.util.*
 
-
+//Location
 class Location {
 
     companion object {
@@ -28,6 +28,7 @@ class Location {
         var lastLon: MutableLiveData<Double> = MutableLiveData()
         var locationString: MutableLiveData<String> = MutableLiveData()
 
+        //Init gets context and other properties from MainActivity
         fun init(context: Context, activity: Activity, locationManager: LocationManager) {
             mainContext = context
             mainActivity = activity
@@ -38,6 +39,7 @@ class Location {
         }
     }
 
+    //Get last location
     fun getLastLocation() {
         if (checkPermission()) {
             if (isLocationEnabled()) {
@@ -60,6 +62,7 @@ class Location {
         }
     }
 
+    //On new location data, init locationRequest
     private fun newLocationData() {
         val locationRequest = LocationRequest()
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -74,6 +77,7 @@ class Location {
         }
     }
 
+    //Location call back
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             val lastLocation: Location = locationResult.lastLocation
@@ -81,6 +85,7 @@ class Location {
         }
     }
 
+    //Get permissions if needed
     private fun checkPermission(): Boolean {
         if (ActivityCompat.checkSelfPermission(
                 mainContext,
@@ -94,6 +99,7 @@ class Location {
         return false
     }
 
+    //Request permissions
     private fun requestPermission() {
         ActivityCompat.requestPermissions(
             mainActivity,
@@ -104,6 +110,7 @@ class Location {
         )
     }
 
+    //Check if location is enabled
     private fun isLocationEnabled(): Boolean {
         val locationManager = mainLocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
@@ -111,6 +118,7 @@ class Location {
         )
     }
 
+    //Get nice string of current address
     private fun getAddress(lat: Double, long: Double): String {
         val geoResult = Geocoder(mainContext, Locale.getDefault()).getFromLocation(lat, long, 3)[0]
 

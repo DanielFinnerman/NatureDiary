@@ -11,11 +11,13 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.list.view.*
 import java.io.File
 
+//FirebaseClass
 class FirebaseClass {
     private lateinit var auth: FirebaseAuth
     private val db = Firebase.firestore
     private val storage = Firebase.storage
 
+    //Init and authenticate to Firebase
     fun authenticate() {
         auth = FirebaseAuth.getInstance()
         try {
@@ -26,6 +28,7 @@ class FirebaseClass {
         }
     }
 
+    //Upload to database
     fun upload(userId: String, title: String, location: String, fileName: String) {
         val timestamp = System.currentTimeMillis()
         val data = hashMapOf(
@@ -42,6 +45,7 @@ class FirebaseClass {
         }
     }
 
+    //Upload files to storage
     fun uploadRecording(userId: String, file: File) {
         val ref = storage.reference.child("$userId/${file.name}")
         val uploadTask = ref.putFile(Uri.fromFile(file))
@@ -53,6 +57,7 @@ class FirebaseClass {
 
     }
 
+    //Download files from storage
     fun downloadRecording(userId: String, fileName: String) {
         val ref = storage.reference.child("$userId/${fileName}")
         val localFile = File.createTempFile("temp", ".pcm")
@@ -66,6 +71,7 @@ class FirebaseClass {
         }
     }
 
+    //Get last item from database
     fun getLastItem(view: View) {
         db.collection(MainActivity.deviceId).orderBy("createdAt")
             .limitToLast(1).get()
@@ -91,6 +97,7 @@ class FirebaseClass {
             }
     }
 
+    //Get all items from database
     fun updateList() {
         ListFiles.files.clear()
         db.collection(MainActivity.deviceId).orderBy("createdAt", Query.Direction.DESCENDING).get()
@@ -116,6 +123,7 @@ class FirebaseClass {
             }
     }
 
+    //Delete file from database
     fun deleteFile(createdAt: String) {
         db.collection(MainActivity.deviceId).document(createdAt).delete()
             .addOnSuccessListener {
