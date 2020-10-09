@@ -13,7 +13,9 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.preference.PreferenceManager
 import kotlinx.android.synthetic.main.activity_main.*
+import org.osmdroid.config.Configuration
 
 const val TAG = "Nature Diary DBG"
 
@@ -30,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         getPermissions()
 
         //Init context to Fragments
-        FragmentRecord.init(pager)
+        FragmentRecord.init(this, this, pager)
         FragmentList.init(this)
 
         //Init AudioPlayer
@@ -41,6 +43,13 @@ class MainActivity : AppCompatActivity() {
 
         //Init Location
         Location.init(this, this, getSystemService(Context.LOCATION_SERVICE) as LocationManager)
+        Location().getLastLocation()
+
+        //Init map
+        Configuration.getInstance().load(
+            applicationContext,
+            PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        )
 
         //Init ViewPager
         val pagerAdapter = SliderAdapter(this)
@@ -52,10 +61,8 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, deviceId)
 
         //Init Firebase
-        Firebase().authenticate()
-        Firebase().updateList()
-
-        Location().getLastLocation()
+        FirebaseClass().authenticate()
+        FirebaseClass().updateList()
 
         btnCommand.setOnClickListener {
             Recorder().stop()
@@ -89,10 +96,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //update location when active
-    override fun onResume() {
-        super.onResume()
-    }
 
     //Avoid STT/TTS memory leaks
     //stop updating location when app not in foreground
@@ -108,18 +111,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getPermissions() {
-        if (ContextCompat.checkSelfPermission(
+        if (
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             ActivityCompat.requestPermissions(
                 this,
                 arrayOf(
-                    Manifest.permission.RECORD_AUDIO,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+
                 ),
                 1
             )

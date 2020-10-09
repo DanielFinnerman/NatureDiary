@@ -7,10 +7,10 @@ import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.*
 import java.util.*
 
@@ -24,7 +24,9 @@ class Location {
         lateinit var mainActivity: Activity
         lateinit var mainLocationManager: LocationManager
 
-        var locationString: String = ""
+        var lastLat: MutableLiveData<Double> = MutableLiveData()
+        var lastLon: MutableLiveData<Double> = MutableLiveData()
+        var locationString: MutableLiveData<String> = MutableLiveData()
 
         fun init(context: Context, activity: Activity, locationManager: LocationManager) {
             mainContext = context
@@ -44,7 +46,9 @@ class Location {
                     if (location == null) {
                         newLocationData()
                     } else {
-                        locationString = getAddress(location.latitude, location.longitude)
+                        lastLat.value = location.latitude
+                        lastLon.value = location.longitude
+                        locationString.value = getAddress(location.latitude, location.longitude)
                     }
                 }
             } else {
@@ -65,7 +69,7 @@ class Location {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(mainActivity)
         if (checkPermission()) {
             fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest, locationCallback, Looper.myLooper()
+                locationRequest, locationCallback, null
             )
         }
     }

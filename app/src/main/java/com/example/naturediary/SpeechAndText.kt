@@ -15,6 +15,7 @@ class SpeechAndText {
         lateinit var speechEngine: TextToSpeech
         lateinit var mainActivity: Activity
         lateinit var mainContext: Context
+
         var lastString: String = ""
 
         fun init(activity: Activity, context: Context) {
@@ -73,20 +74,33 @@ class SpeechAndText {
                         )
 
                     }
-                    string.contains(mainContext.getString(R.string.command_go)) -> {
+                    string.contains(mainContext.getString(R.string.page_list)) -> {
                         pager2.currentItem = 2
                         SpeechAndText().stringToSpeech(
-                             "${mainContext.getString(R.string.command_assistant_location)} " +
+                            "${mainContext.getString(R.string.command_assistant_location)} " +
                                     "${mainContext.getString(R.string.page_list)}"
+                        )
+                    }
+                    string.contains(mainContext.getString(R.string.page_settings)) -> {
+                        pager2.currentItem = 3
+                        SpeechAndText().stringToSpeech(
+                            "${mainContext.getString(R.string.command_assistant_location)} " +
+                                    "${mainContext.getString(R.string.page_settings)}"
                         )
                     }
                 }
             }
             //Other commands
+            /*
             string.contains(mainContext.getString(R.string.command_record)) -> {
                 pager2.currentItem = 1
-                Recorder().record()
+
             }
+            string.contains(mainContext.getString(R.string.command_play)) -> {
+                pager2.currentItem = 1
+
+            }
+            */
             else -> speechEngine.speak(
                 mainContext.getString(R.string.command_assistant_error),
                 TextToSpeech.QUEUE_FLUSH,
